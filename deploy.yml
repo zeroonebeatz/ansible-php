@@ -1,0 +1,5 @@
+---
+- name: Config ttm server
+  hosts: all
+  tasks:
+    - import_tasks: "tasks/setup-server.yml"

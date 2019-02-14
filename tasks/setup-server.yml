@@ -1,0 +1,54 @@
+- name: Prepare shell
+  shell: export GIT_TRACE_PACKET=1 && export GIT_TRACE=1 && export GIT_CURL_VERBOSE=1
+
+- name: Install server dependencies
+  become: true
+  become_method: sudo
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - git
+    - redis-server
+    - redis-tools
+    - supervisor
+    - nginx
+
+- name: Install the ondrej/php repo
+  become: true
+  become_method: sudo
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
+- name: Install PHP
+  become: true
+  become_method: sudo
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - php7.1
+    - php7.1-fpm
+    - php7.1-cli
+    - php7.1-common
+    - php7.1-curl
+    - php7.1-gd
+    - php7.1-json
+    - php7.1-mbstring
+    - php7.1-mysql
+    - php7.1-mcrypt
+    - php7.1-opcache
+    - php7.1-zip
+    - php7.1-xml
+    - php7.1-tidy
+
+- name: Install Deploy
+  become: true
+  become_method: sudo
+  shell: curl -LO https://deployer.org/deployer.phar && mv deployer.phar /usr/local/bin/dep && chmod +x /usr/local/bin/dep
+
+
+- name: Install the nodejs
+  become: true
+  become_method: sudo
+  apt: name={{ item }} state=present update_cache=yes force=yes
+  with_items:
+    - nodejs
+    - build-essential
+    - npm
